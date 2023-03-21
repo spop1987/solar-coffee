@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,17 +6,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using SolarCoffee.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace SolarCoffee.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
+
+        private readonly IWebHostEnvironment _env;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -28,16 +33,27 @@ namespace SolarCoffee.Web
                 };
             });
 
-            // services.AddDbContext<SolarDbContext>(
-            //     opts => {
-            //     opts.EnableDetailedErrors();
-            //     opts.UseNpgsql(Configuration.GetConnectionString("solar.dev"));
-            // });
+            if(_env.IsDevelopment()){
+                Console.WriteLine("--> Using SqlServer DB");
+                ConfigureDb(services);
+            }else{
+                ConfigureDb(services);
+                Console.WriteLine("--> Using InMem Db");
+                services.AddDbContext<SolarDbContext>(opt => opt.UseInMemoryDatabase("InMen"));
+            }
 
             // services.AddTransient<IProductService, ProductService>();
             // services.AddTransient<ICustomerService, CustomerService>();
             // services.AddTransient<IInventoryService, InventoryService>();
             // services.AddTransient<IOrderService, OrderService>();
+        }
+
+        protected virtual void ConfigureDb(IServiceCollection services)
+        {
+            services.AddDbContext<SolarDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Solar.dev"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
