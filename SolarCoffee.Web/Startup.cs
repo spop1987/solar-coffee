@@ -7,6 +7,10 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using SolarCoffee.Data;
 using Microsoft.EntityFrameworkCore;
+using SolarCoffee.Services.Services;
+using SolarCoffee.Services.IServices;
+using SolarCoffee.Data.Translators;
+using SolarCoffee.Data.DataAccess;
 
 namespace SolarCoffee.Web
 {
@@ -42,10 +46,14 @@ namespace SolarCoffee.Web
                 services.AddDbContext<SolarDbContext>(opt => opt.UseInMemoryDatabase("InMen"));
             }
 
-            // services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IProductService, ProductService>();
             // services.AddTransient<ICustomerService, CustomerService>();
             // services.AddTransient<IInventoryService, InventoryService>();
             // services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IToEntityTranslator, ToEntityTranslator>();
+            services.AddTransient<IToDtoTranslator, ToDtoTranslator>();
+            services.AddTransient<ICommands, Commands>();
+            services.AddTransient<IQueries, Queries>();
         }
 
         protected virtual void ConfigureDb(IServiceCollection services)
