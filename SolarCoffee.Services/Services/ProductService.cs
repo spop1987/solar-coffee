@@ -1,8 +1,8 @@
 using SolarCoffee.Data.Dtos;
-using SolarCoffee.Data.Models;
 using SolarCoffee.Services.IServices;
 using SolarCoffee.Data.Translators;
 using SolarCoffee.Data.DataAccess;
+using SolarCoffee.Services.ModelResponse;
 
 namespace SolarCoffee.Services.Services
 {

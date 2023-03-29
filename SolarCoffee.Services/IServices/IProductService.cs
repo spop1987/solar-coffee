@@ -1,6 +1,5 @@
-using SolarCoffee.Services.Services;
-using SolarCoffee.Data.Models;
 using SolarCoffee.Data.Dtos;
+using SolarCoffee.Services.ModelResponse;
 
 namespace SolarCoffee.Services.IServices
 {

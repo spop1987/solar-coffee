@@ -1,4 +1,4 @@
-namespace SolarCoffee.Services.Services
+namespace SolarCoffee.Services.ModelResponse
 {
     public class ServiceResponse<T>
     {
