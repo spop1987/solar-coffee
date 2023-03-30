@@ -20,7 +20,7 @@ namespace SolarCoffee.Data.DataAccess
         List<SalesOrder> GetAllSalesOrders();
         SalesOrder GetSalesOrderById(int id);
     }
-    public class Queries<T> : IQueries
+    public class Queries : IQueries
     {
         private readonly SolarDbContext _context;
 
