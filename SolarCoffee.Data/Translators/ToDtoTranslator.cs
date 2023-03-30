@@ -9,6 +9,15 @@ namespace SolarCoffee.Data.Translators
     {
         ProductDto ToProductDto(Product product);
         List<ProductDto> ToListOfProductDto(List<Product> products);
+        CustomerDto ToCustomerDto(Customer customer);
+        List<CustomerDto> ToListOfCustomerDto(List<Customer> customers);
+        ProductInventoryDto ToProductInventoryDto(ProductInventory productInventory);
+        ProductInventorySnapshotDto ToProductInventorySnapshotDto(ProductInventorySnapshot productInventorySnapshot);
+        SalesOrderDto ToSalesOrderDto(SalesOrder salesOrder);
+        SalesOrderItemDto ToSalesOrderItemDto(SalesOrderItem salesOrderItem);
+        List<ProductInventoryDto> ToListOfProductInventoryDto(List<ProductInventory> listOfProductInventory);
+        List<ProductInventorySnapshotDto> ToListOfProductInventorySnapshotDto(List<ProductInventorySnapshot> listOfProductInventorySnapshot);
+        List<SalesOrderDto> ToListOfSalesOrderDto(List<SalesOrder> listOfSalesOrder);
     }
 
     public class ToDtoTranslator : IToDtoTranslator
@@ -90,6 +99,42 @@ namespace SolarCoffee.Data.Translators
             });
 
             return listOfProductsDto;
+        }
+
+        public List<CustomerDto> ToListOfCustomerDto(List<Customer> customers)
+        {
+            var listOfCustomerDto = new List<CustomerDto>();
+            customers.ForEach(c => {
+                listOfCustomerDto.Add(ToCustomerDto(c));
+            });
+            return listOfCustomerDto;
+        }
+
+        public List<ProductInventoryDto> ToListOfProductInventoryDto(List<ProductInventory> listOfProductInventory)
+        {
+            var listOfProductInventoryDto = new List<ProductInventoryDto>();
+            listOfProductInventory.ForEach(pi => {
+                listOfProductInventoryDto.Add(ToProductInventoryDto(pi));
+            });
+            return listOfProductInventoryDto;
+        }
+
+        public List<ProductInventorySnapshotDto> ToListOfProductInventorySnapshotDto(List<ProductInventorySnapshot> listOfProductInventorySnapshot)
+        {
+            var listOfProductInventorySnapshotDto = new List<ProductInventorySnapshotDto>();
+            listOfProductInventorySnapshot.ForEach(pi => {
+                listOfProductInventorySnapshotDto.Add(ToProductInventorySnapshotDto(pi));
+            });
+            return listOfProductInventorySnapshotDto;
+        }
+
+        public List<SalesOrderDto> ToListOfSalesOrderDto(List<SalesOrder> listOfSalesOrder)
+        {
+            var listOfSalesOrderDto = new List<SalesOrderDto>();
+            listOfSalesOrder.ForEach(so => {
+                listOfSalesOrderDto.Add(ToSalesOrderDto(so));
+            });
+            return listOfSalesOrderDto;
         }
 
         private List<SalesOrderItemDto> ToSalesOrderItemsDto(List<SalesOrderItem> salesOrderItems)
