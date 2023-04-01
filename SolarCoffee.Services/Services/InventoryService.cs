@@ -42,14 +42,28 @@ namespace SolarCoffee.Services.Services
             return new List<ProductInventoryDto>();
         }
 
-        public List<ProductInventorySnapshotDto> GetSnapshotHistory()
+        public SnapshotResponseDto GetSnapshotHistory()
         {
             var earliest = DateTime.UtcNow - TimeSpan.FromHours(2);
             var listOfProductInventorySnaapshot = _queries.GetSnapshotHistory(earliest);
-            if(listOfProductInventorySnaapshot.Count > 0)
-                return _toDtoTranslator.ToListOfProductInventorySnapshotDto(listOfProductInventorySnaapshot);
+            if(listOfProductInventorySnaapshot.Count == 0)
+                throw new Exception("There are not snapshot history");
+
+            var timelineMarkers = listOfProductInventorySnaapshot.Select(t => t.SnapshotTime).Distinct().ToList();
+            var snapshots = listOfProductInventorySnaapshot
+                .GroupBy(hist => hist.Product, 
+                        hist => hist.QuantityOnHand, 
+                        (key, g) => new SnapshotHistoryDto
+                                    {   ProductId = key.Id, 
+                                        QuantityOnHand = g.ToList()
+                                    }).OrderBy(hist => hist.ProductId).ToList();
             
-            return new List<ProductInventorySnapshotDto>();
+            var snapshotResponseDto = new SnapshotResponseDto
+            {
+                Timeline = timelineMarkers,
+                ListOfSnapshotHistoryDto = snapshots
+            };
+            return snapshotResponseDto;
         }
 
         public ServiceResponse<ProductInventoryDto> UpdateUnitsAvailable(int id, int adjustment)

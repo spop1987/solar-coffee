@@ -1,5 +1,6 @@
 using SolarCoffee.Data.DataAccess;
 using SolarCoffee.Data.Dtos;
+using SolarCoffee.Data.Models;
 using SolarCoffee.Data.Translators;
 using SolarCoffee.Services.IServices;
 using SolarCoffee.Services.ModelResponse;
@@ -38,6 +39,22 @@ namespace SolarCoffee.Services.Services
         {
             var listOfSalesOrder = _queries.GetAllSalesOrders();
             return _toDtoTranslator.ToListOfSalesOrderDto(listOfSalesOrder);
+        }
+
+        public SalesOrderDto GetSalesOrder(InvoiceDto invoiceDto)
+        {
+            var salesOrder = invoiceDto.LineItems.Select(item => new SalesOrderItemDto
+            {
+                Quantity = item.Quantity,
+                Product = item.Product
+            }).ToList();
+            var salesOrderDto = new SalesOrderDto
+            {
+                CreatedOn = DateTime.UtcNow,
+                UpdatedOn = DateTime.UtcNow,
+                SalesOrderItems = salesOrder
+            };
+            return salesOrderDto;
         }
 
         public ServiceResponse<bool> MarkFulfilled(int id)

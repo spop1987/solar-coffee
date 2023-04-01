@@ -38,7 +38,7 @@ namespace SolarCoffee.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/product")]
-        public ActionResult GetProduct()
+        public ActionResult GetProducts()
         {
             _logger.LogInformation("Getting all products");
             return Ok(_productService.GetAllProducts());
